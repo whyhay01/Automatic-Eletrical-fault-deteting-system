@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">AUTOMATIC ELECTRIC FAULT DETECTING SYSTEM</string>
+    <string name="first_menu">Refresh</string>
+    <string name="second_menu">About</string>
+    <string name="third_menu">Help</string>
+    <string name="forth_menu">Quit</string>
+</resources>

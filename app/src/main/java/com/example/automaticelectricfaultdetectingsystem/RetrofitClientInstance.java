@@ -10,7 +10,7 @@ public class RetrofitClientInstance {
 
 
         private static Retrofit retrofit;
-        private static final String BASE_URL = "https://api.thingspeak.com/channels/1093876/fields/1.json/";
+        private static final String BASE_URL = "https://api.thingspeak.com/channels/1093876/feeds.json/";
 
         public static Retrofit getRetrofitInstance() {
             if (retrofit == null) {

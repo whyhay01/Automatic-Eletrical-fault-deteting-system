@@ -2,6 +2,8 @@ package com.example.automaticelectricfaultdetectingsystem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -27,9 +29,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     private String TAG = MainActivity.class.getSimpleName();
-    ListView listView;
+    CurrentAdapter adapter;
     ProgressDialog progressDoalog;
-     CurrentValue currentValue;
+     List<CurrentValue> currentValues;
+     RecyclerView recyclerView;
 
 
     @Override
@@ -38,14 +41,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        getCurrentField();
+       getCurrentField();
 
         progressDoalog = new ProgressDialog(MainActivity.this);
         progressDoalog.setMessage("Loading....");
         progressDoalog.show();
     }
 
-    private void getCurrentField(){
+   private void getCurrentField(){
 
 //        Retrofit retrofit = new Retrofit.Builder()
 //                .baseUrl(GetCurrent.BASE_URL)
@@ -54,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
 
         GetCurrent api = RetrofitClientInstance.getRetrofitInstance().create(GetCurrent.class); // retrofit.create(GetCurrent.class);
         Call<CurrentFeeds> call = api.getCurrentField();
-
         call.enqueue(new Callback<CurrentFeeds>() {
             @Override
             public void onResponse(Call<CurrentFeeds> call, Response<CurrentFeeds> response) {
@@ -62,28 +64,11 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.v(TAG, "Response Body ==>" +response.body());
 
-                Toast.makeText(MainActivity.this, "onResponse(Call<CurrentFeeds> call, Response<CurrentFeeds> response)", Toast.LENGTH_SHORT).show();
+
+
 
                 progressDoalog.dismiss();
-                List<CurrentValue> feedList = new ArrayList();
-                feedList = response.body().getFeeds();
-
-                String [] displayList = new String[feedList.size()];
-//                String[] noCurrentValue = {"No current value","No current value"};
-
-                for (int i = 0; i < feedList.size(); i++){
-                    if (feedList.get(i).getField1() != null) {
-                        displayList[i] = feedList.get(i).getField1();
-                        Log.v(TAG, "Feed Value ==>" + displayList[i]);
-                    }else
-                        displayList[i] = "No current value";
-                }
-
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, displayList);
-                listView = findViewById(R.id.display_screen);
-                listView.setAdapter(arrayAdapter);
-
-
+                bindingData(response.body());
 
             }
 
@@ -96,6 +81,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+     public void bindingData(CurrentFeeds feeds){
+         recyclerView = findViewById(R.id.recycler_view);
+         adapter = new CurrentAdapter(feeds);
+         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+         recyclerView.setLayoutManager(layoutManager);
+         recyclerView.setAdapter(adapter);
+     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -109,6 +101,9 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu1:
                 getCurrentField();
+                progressDoalog = new ProgressDialog(MainActivity.this);
+                progressDoalog.setMessage("Loading....");
+                progressDoalog.show();
                 return true;
             case R.id.menu2:
                 Toast.makeText(this,"Option not available",Toast.LENGTH_SHORT).show();
@@ -117,10 +112,11 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this,"Option not available",Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu4:
-                Toast.makeText(this,"Option not available",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Thank you",Toast.LENGTH_SHORT).show();
+                finish();
                 return true;
             default:
             return super.onOptionsItemSelected(item);
         }
     }
-}
+     }

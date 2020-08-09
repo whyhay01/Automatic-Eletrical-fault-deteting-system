@@ -15,10 +15,14 @@ public class CurrentValue {
     @SerializedName("field1")
     private String field1;
 
-    public CurrentValue(Date created_at, Integer entry_id, String field1) {
+    @SerializedName("field2")
+    private String field2;
+
+    public CurrentValue(Date created_at, Integer entry_id, String field1, String field2) {
         this.created_at = created_at;
         this.entry_id = entry_id;
         this.field1 = field1;
+        this.field2 = field2;
     }
 
     public Date getCreated_at() {
@@ -31,5 +35,9 @@ public class CurrentValue {
 
     public String getField1() {
         return field1;
+    }
+
+    public String getField2() {
+        return field2;
     }
 }

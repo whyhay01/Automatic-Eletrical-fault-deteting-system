@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -106,7 +107,8 @@ public class MainActivity extends AppCompatActivity {
                 progressDoalog.show();
                 return true;
             case R.id.menu2:
-                Toast.makeText(this,"Option not available",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, AboutApp.class);
+                startActivity(intent);
                 return true;
             case R.id.menu3:
                 Toast.makeText(this,"Option not available",Toast.LENGTH_SHORT).show();
